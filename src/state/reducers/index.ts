@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import dataReducer from "./dataReducer";
+import favouritesReducer from "./dataReducer";
 
 const reducers = combineReducers({
-  data: dataReducer,
+  data: favouritesReducer,
 });
 
 export default reducers;

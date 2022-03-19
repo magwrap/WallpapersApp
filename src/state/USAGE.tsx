@@ -10,7 +10,7 @@ interface USAGEProps {}
 
 const USAGE: React.FC<USAGEProps> = ({}) => {
   const dispatch = useDispatch();
-  const { addState, removeState } = bindActionCreators(
+  const { addPhoto, removePhoto } = bindActionCreators(
     actionCreators,
     dispatch
   );

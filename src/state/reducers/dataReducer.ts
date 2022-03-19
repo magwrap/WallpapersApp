@@ -1,30 +1,26 @@
+import { Photos } from "pexels";
 import { ActionType } from "../action-types";
 import { Action } from "../actions";
 
-type DataState = [];
+type FavouritesState = Photos | [];
 
-const initialState: DataState = [];
+const initialState: FavouritesState = [];
 
-let lastId = 0;
-
-const dataReducer = (state = initialState, action: Action) => {
+const favouritesReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case ActionType.ADDED:
       return [
         ...state,
-        {
-          id: ++lastId,
-          description: action.payload.description,
-          resolved: false,
-        },
+        action.payload.photo,
+        
       ];
     case ActionType.REMOVED:
       return state.filter(
-        (oneData: { id: number }) => oneData.id !== action.payload.id
+        (photo: { id: number }) => photo.id !== action.payload.id,
       );
     default:
       return state;
   }
 };
 
-export default dataReducer;
+export default favouritesReducer;

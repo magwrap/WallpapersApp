@@ -2137,6 +2137,11 @@
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.2.1.tgz#86f19781c6f34a5c9dd25dca99915e0306f477d1"
   integrity sha512-EnmAbKMsptrliRKf95rdgS6BhMjML+mIns06+G1Vdih6BrEo7/0iytThUv3WBf99AI76dyEq/cqLUwHPiFzXWg==
 
+"@react-navigation/elements@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.1.tgz#aacb08fe0ca4db50f0ed16b72906869ce770edf4"
+  integrity sha512-jIDRJaG8YPIinl4hZXJu/W3TnhDe8hLYmGSEdL1mxZ1aoNMiApCBYkgTy11oq0EfK/koZd3DPSkJNbzBAQmPJw==
+
 "@react-navigation/material-bottom-tabs@^6.0.9":
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/@react-navigation/material-bottom-tabs/-/material-bottom-tabs-6.0.9.tgz#e809b18e6d1ffecd05f85e575224d65b769900b2"
@@ -2175,6 +2180,15 @@
   integrity sha512-8xJL+djIzpFdRW/sGlKojQ06fWgFk1c5jER9501HYJ12LF5DIJFr/tqBI2TJ6bk+y+QFu0nbNyeRC80OjRlmkA==
   dependencies:
     nanoid "^3.1.23"
+
+"@react-navigation/stack@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@react-navigation/stack/-/stack-6.1.1.tgz#eb0dd2f5dec01b9322b7cea8767cb1e408365124"
+  integrity sha512-mr7CrP3rvYapTZj/xUInJYDte2QEQPvK8qBI6kbJ6goeLqRMkcO7haK4Q5FeV1HVYCUnssAn7CA5j+OOm59syg==
+  dependencies:
+    "@react-navigation/elements" "^1.3.1"
+    color "^3.1.3"
+    warn-once "^0.1.0"
 
 "@reduxjs/toolkit@^1.6.2":
   version "1.6.2"
@@ -4872,6 +4886,14 @@ isomorphic-fetch@^2.1.1:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
 
+isomorphic-fetch@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-3.0.0.tgz#0267b005049046d2421207215d45d6a262b8b8b4"
+  integrity sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==
+  dependencies:
+    node-fetch "^2.6.1"
+    whatwg-fetch "^3.4.1"
+
 istanbul-lib-coverage@^3.0.0, istanbul-lib-coverage@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/istanbul-lib-coverage/-/istanbul-lib-coverage-3.2.0.tgz#189e7909d0a39fa5a3dfad5b03f71947770191d3"
@@ -6421,6 +6443,13 @@ node-fetch@^2.2.0, node-fetch@^2.6.0:
   dependencies:
     whatwg-url "^5.0.0"
 
+node-fetch@^2.6.1:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
+  dependencies:
+    whatwg-url "^5.0.0"
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
@@ -6820,6 +6849,13 @@ path-parse@^1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
   integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
+
+pexels@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/pexels/-/pexels-1.3.0.tgz#0851f2afa9958f00c3d8488e5d65b2eb2dd870f3"
+  integrity sha512-V7fFeLAlAkYGpAHvIh2shvvYEK7EPR7PrBX2Qla3NgAzAqjdEq5j8MXmrpOweBpl/Li9MO+B6ZJ09CvuVHJXXA==
+  dependencies:
+    isomorphic-fetch "^3.0.0"
 
 picocolors@^1.0.0:
   version "1.0.0"
@@ -8680,7 +8716,7 @@ whatwg-fetch@2.0.4:
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
   integrity sha512-dcQ1GWpOD/eEQ97k66aiEVpNnapVj90/+R+SXTPYGHpYBBypfKJEQjLrvMZ7YXbKm21gXd4NcuxUTjiv1YtLng==
 
-whatwg-fetch@>=0.10.0, whatwg-fetch@^3.0.0:
+whatwg-fetch@>=0.10.0, whatwg-fetch@^3.0.0, whatwg-fetch@^3.4.1:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.2.tgz#dced24f37f2624ed0281725d51d0e2e3fe677f8c"
   integrity sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==

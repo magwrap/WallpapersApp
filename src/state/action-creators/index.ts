@@ -1,21 +1,20 @@
 import { ActionType } from "../action-types";
 import { Dispatch } from "redux";
 import { Action } from "../actions";
+import { Photo } from "pexels";
 
-export const addState = (description: string) => {
-  description = "descripiton";
+export const addPhoto = (photo: Photo) => {
   return (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.ADDED,
       payload: {
-        description: description,
+        photo,
       },
     });
   };
 };
 
-export const removeState = (id: number) => {
-  id = 1;
+export const removePhoto = (id: Photo["id"]) => {
   return (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.REMOVED,

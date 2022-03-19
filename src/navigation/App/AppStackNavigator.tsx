@@ -1,41 +1,28 @@
 import React from "react";
-import ModalScreen from "@/screens/App/ModalScreen";
-import NotFoundScreen from "@/screens/App/NotFoundScreen";
-import BottomTabNavigator from "./BottomTabNavigator";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
+import { createStackNavigator } from "@react-navigation/stack";
+import DrawerNavigator from "@/navigation/App/DrawerNavigator";
+import ViewPhotoScreen from "@/screens/App/ViewPhotoScreen";
 interface AppStackNavigatorProps {}
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 const AppStackNavigator: React.FC<AppStackNavigatorProps> = ({}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-      {/* <Stack.Screen
-        name="Root"
-        component={TopTabNavigator}
-        options={{ headerShown: false }}
-      /> */}
-      {/* <Stack.Screen
-        name="Root"
         component={DrawerNavigator}
         options={{ headerShown: false }}
-      /> */}
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-        // fallbackscreen
       />
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-        {/* zewnetrzny poza tabsami */}
-      </Stack.Group>
+
+      <Stack.Screen
+        name="ViewPhoto"
+        component={ViewPhotoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      {/* zewnetrzny poza tabsami */}
     </Stack.Navigator>
   );
 };

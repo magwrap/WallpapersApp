@@ -1,22 +1,18 @@
+import { Photo } from "pexels";
 import { ActionType } from "../action-types";
 
 interface AddedAction {
   type: ActionType.ADDED;
   payload: {
-    description: string;
-  };
+      photo:Photo, 
+  }
 }
 
 interface RemovedAction {
   type: ActionType.REMOVED;
   payload: {
-    id: number;
-  };
+      id : Photo["id"]
+    };
 }
-
-// type Action = {
-//   type: string;
-//   payload?: any;
-// };
 
 export type Action = AddedAction | RemovedAction;
