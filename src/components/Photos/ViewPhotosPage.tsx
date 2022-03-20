@@ -1,9 +1,11 @@
 import usePexels from "@/hooks/usePexels";
+import { useNavigation } from "@react-navigation/native";
+
 import { ErrorResponse, Photo, Photos } from "pexels";
 import React, { useState } from "react";
 import { View, Animated, RefreshControl } from "react-native";
 import { ActivityIndicator, Divider, useTheme } from "react-native-paper";
-import PexelsInfo from "../PexelsInfo";
+import ListFooter from "./ListFooter";
 import PhotoItem from "./PhotoItem";
 
 interface ViewPhotosPageProps {
@@ -19,7 +21,12 @@ type EmptyPhotos = {
 //TODO: naprawic favourites, --> czy stan to beda tylko id zdjec i je bedzie fetchowac , czy moze ich id, url i autor?
 //TODO: dodac ekran ze swapowaniem zdjec
 const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
-  const [photosPage, setPhotosPage] = React.useState<
+  const { fetchCategoryPhotos } = usePexels();
+  const { colors } = useTheme();
+  const { navigation } = useNavigation();
+
+  const [page, setPage] = useState(1);
+  const [photosPage, setPhotosPage] = useState<
     Photos | EmptyPhotos | ErrorResponse
   >({
     photos: [],
@@ -29,8 +36,7 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
     setOnEndReachedCalledDuringMomentum,
   ] = useState(false);
 
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [page, setPage] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
   React.useEffect(() => {
@@ -43,12 +49,16 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
     }
   }, [page]);
 
-  const { fetchCategoryPhotos } = usePexels();
-  const { colors } = useTheme();
+  const hideHeader = () => {
+    navigation.setOptions({ headerShown: false });
+  };
 
-  const onEndReached = async ({}) => {
+  const showHeader = () => {
+    navigation.setOptions({ headerShown: true });
+  };
+
+  const onEndReached = async () => {
     if (!onEndReachedCalledDuringMomentum) {
-      //fetch
       getNextPage();
       setOnEndReachedCalledDuringMomentum(true);
     }
@@ -61,9 +71,8 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
 
   const getNextPage = async () => {
     setLoadingMore(true);
-
     const photosPg = await fetchCategoryPhotos(page, queryName);
-    // if (photosPage && "photos" in photosPage) {
+
     setPhotosPage({
       ...photosPg,
       photos:
@@ -71,13 +80,11 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
           ? photosPage.photos.concat(photosPg.photos)
           : null,
     });
-    // }
 
     setPage(page + 1);
 
     setLoadingMore(false);
   };
-  //TODO: w dekorator to zamienic
 
   const getFirstPage = async () => {
     setLoadingMore(true);
@@ -117,16 +124,9 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
           renderItem={renderItem}
           keyExtractor={(photo) => photo.id.toString()}
           ListFooterComponentStyle={{ height: 120, borderTopWidth: 1 }}
-          ListFooterComponent={
-            <>
-              {loadingMore && (
-                <View style={{ padding: 5 }}>
-                  <ActivityIndicator color={colors.third} size="large" />
-                </View>
-              )}
-              <PexelsInfo />
-            </>
-          }
+          onScrollBeginDrag={hideHeader}
+          onScrollEndDrag={showHeader}
+          ListFooterComponent={<ListFooter loadingMore={loadingMore} />}
           ItemSeparatorComponent={() => <Divider />}
           onEndReached={onEndReached.bind(this)}
           onEndReachedThreshold={0.5}
