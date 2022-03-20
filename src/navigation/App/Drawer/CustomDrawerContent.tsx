@@ -7,6 +7,7 @@ import {
 import { Drawer, useTheme } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
 import PexelsInfo from "@/components/PexelsInfo";
+import { DrawerScreenNames } from "./DrawerScreenNames";
 
 interface CustomDrawerContentProps {
   props: DrawerContentComponentProps;
@@ -14,11 +15,11 @@ interface CustomDrawerContentProps {
 
 const chooseItemIcon = (name: string) => {
   switch (name) {
-    case "Main":
+    case DrawerScreenNames.MAIN:
       return "home";
-    case "Category1":
-      return "menu";
-    case "Favourites":
+    case DrawerScreenNames.CATEGORY:
+      return "loupe";
+    case DrawerScreenNames.FAVOURITES:
       return "heart";
   }
 };

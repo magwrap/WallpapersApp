@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import DrawerNavigator from "@/navigation/App/DrawerNavigator";
+import DrawerNavigator from "@/navigation/App/Drawer/DrawerNavigator";
 import ViewPhotoScreen from "@/screens/App/ViewPhotoScreen";
 interface AppStackNavigatorProps {}
 

@@ -8,6 +8,7 @@ import CustomDrawerContent from "./CustomDrawerContent";
 
 import Header from "@/components/Header";
 import FavouritesScreen from "@/screens/App/FavouritesScreen";
+import { DrawerScreenNames } from "./DrawerScreenNames";
 
 const Drawer = createDrawerNavigator();
 
@@ -36,15 +37,14 @@ const DrawerNavigator: React.FC<DrawerNavigatorProps> = ({}) => {
       }}
       drawerContent={(props) => <CustomDrawerContent props={props} />}>
       <Drawer.Screen
-        name="Main"
+        name={DrawerScreenNames.MAIN}
         component={MainScreen}
         options={{
-          headerTitle: "All Wallpapers",
           header: (props) => <Header {...props} />,
         }}
       />
       <Drawer.Screen
-        name="Category1"
+        name={DrawerScreenNames.CATEGORY}
         component={CategoryScreen}
         options={{
           header: (props) => <Header {...props} />,
@@ -52,7 +52,7 @@ const DrawerNavigator: React.FC<DrawerNavigatorProps> = ({}) => {
       />
 
       <Drawer.Screen
-        name="Favourites"
+        name={DrawerScreenNames.FAVOURITES}
         component={FavouritesScreen}
         options={{
           header: (props) => <Header {...props} />,

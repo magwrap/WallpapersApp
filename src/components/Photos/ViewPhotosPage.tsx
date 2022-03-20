@@ -1,5 +1,5 @@
 import usePexels from "@/hooks/usePexels";
-import { Photo, Photos } from "pexels";
+import { ErrorResponse, Photo, Photos } from "pexels";
 import React, { useState } from "react";
 import { View, Animated, RefreshControl } from "react-native";
 import { ActivityIndicator, Divider, useTheme } from "react-native-paper";
@@ -13,12 +13,15 @@ interface ViewPhotosPageProps {
 type EmptyPhotos = {
   photos: [];
 };
+
 //TODO: dodac ukrywajacy sie header
 //TODO: doadc ekran gdzie sie szuka po nazwie
 //TODO: naprawic favourites, --> czy stan to beda tylko id zdjec i je bedzie fetchowac , czy moze ich id, url i autor?
 //TODO: dodac ekran ze swapowaniem zdjec
 const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
-  const [photosPage, setPhotosPage] = React.useState<Photos | EmptyPhotos>({
+  const [photosPage, setPhotosPage] = React.useState<
+    Photos | EmptyPhotos | ErrorResponse
+  >({
     photos: [],
   });
   const [
@@ -35,7 +38,9 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
   }, []);
 
   React.useEffect(() => {
-    console.log(photosPage?.page);
+    if ("page" in photosPage) {
+      console.log(photosPage?.page);
+    }
   }, [page]);
 
   const { fetchCategoryPhotos } = usePexels();
@@ -58,21 +63,29 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
     setLoadingMore(true);
 
     const photosPg = await fetchCategoryPhotos(page, queryName);
+    // if (photosPage && "photos" in photosPage) {
     setPhotosPage({
       ...photosPg,
-      photos: photosPage.photos.concat(photosPg.photos),
+      photos:
+        "photos" in photosPage && photosPg && "photos" in photosPg
+          ? photosPage.photos.concat(photosPg.photos)
+          : null,
     });
+    // }
 
     setPage(page + 1);
 
     setLoadingMore(false);
   };
   //TODO: w dekorator to zamienic
+
   const getFirstPage = async () => {
     setLoadingMore(true);
 
     const photosPg = await fetchCategoryPhotos(1, queryName);
-    setPhotosPage(photosPg);
+    if (photosPg) {
+      setPhotosPage(photosPg);
+    }
     setPage(2);
 
     setLoadingMore(false);
@@ -93,11 +106,11 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
         </View>
       );
     },
-    [refreshing]
+    [] //refreshing
   );
   return (
     <View style={{ flex: 1 }}>
-      {photosPage.photos.length ? (
+      {"photos" in photosPage && photosPage.photos.length ? (
         <Animated.FlatList
           numColumns={2}
           data={photosPage.photos}
@@ -115,7 +128,6 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
             </>
           }
           ItemSeparatorComponent={() => <Divider />}
-          //   contentOffset={{ x: 0, y: 0 }}
           onEndReached={onEndReached.bind(this)}
           onEndReachedThreshold={0.5}
           onMomentumScrollBegin={() => {
