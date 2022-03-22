@@ -19,13 +19,6 @@ const DrawerNavigator: React.FC<DrawerNavigatorProps> = ({}) => {
   return (
     <Drawer.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: colors.primary,
-        },
-        headerTintColor: colors.third,
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
         drawerStyle: {
           backgroundColor: colors.primary,
           width: 240,
@@ -34,13 +27,14 @@ const DrawerNavigator: React.FC<DrawerNavigatorProps> = ({}) => {
         drawerLabelStyle: {
           color: colors.third,
         },
+        // headerShown: false,
       }}
       drawerContent={(props) => <CustomDrawerContent props={props} />}>
       <Drawer.Screen
         name={DrawerScreenNames.MAIN}
         component={MainScreen}
         options={{
-          header: (props) => <Header {...props} />,
+          header: (props) => null,
         }}
       />
       <Drawer.Screen

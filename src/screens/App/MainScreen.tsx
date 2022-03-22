@@ -122,7 +122,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   //     });
   //   };
 
-  return <ViewPhotosPage queryName="New" />;
+  return <ViewPhotosPage queryName="New" navigation={navigation} />;
 };
 
 export default MainScreen;

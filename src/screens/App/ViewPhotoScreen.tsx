@@ -57,6 +57,7 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
     }
   };
   const _downloadPhoto = () => {
+    //TODO: dodac push notification informujace o pobraniu zdjecia
     if (photo) {
       let link = photo.src.original.split("/");
       let name = link[link.length - 1];

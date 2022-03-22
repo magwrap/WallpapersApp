@@ -1,29 +1,39 @@
 import usePexels from "@/hooks/usePexels";
-import { useNavigation } from "@react-navigation/native";
+import { DrawerScreenNames } from "@/navigation/App/Drawer/DrawerScreenNames";
+import { StatusBar } from "expo-status-bar";
 
 import { ErrorResponse, Photo, Photos } from "pexels";
-import React, { useState } from "react";
-import { View, Animated, RefreshControl } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { View, RefreshControl, StyleSheet, SafeAreaView } from "react-native";
 import { ActivityIndicator, Divider, useTheme } from "react-native-paper";
+import Animated, {
+  Extrapolate,
+  interpolateNode,
+} from "react-native-reanimated";
+import Header from "../Header";
+import AnimatedFlatList from "./AnimatedFlatList";
 import ListFooter from "./ListFooter";
 import PhotoItem from "./PhotoItem";
 
 interface ViewPhotosPageProps {
   queryName: string;
+  navigation: any;
 }
 
 type EmptyPhotos = {
   photos: [];
 };
+const { Value } = Animated;
 
-//TODO: dodac ukrywajacy sie header
-//TODO: doadc ekran gdzie sie szuka po nazwie
-//TODO: naprawic favourites, --> czy stan to beda tylko id zdjec i je bedzie fetchowac , czy moze ich id, url i autor?
-//TODO: dodac ekran ze swapowaniem zdjec
-const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
+//TODO: naprawic bug przy scrollowaniu ekran sie scina
+
+const CONTAINER_HEIGHT = 50;
+const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
+  queryName,
+  navigation,
+}) => {
   const { fetchCategoryPhotos } = usePexels();
   const { colors } = useTheme();
-  const { navigation } = useNavigation();
 
   const [page, setPage] = useState(1);
   const [photosPage, setPhotosPage] = useState<
@@ -39,23 +49,35 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  React.useEffect(() => {
+  //header
+  const max = 80;
+  const scrollY = useRef(new Value(0));
+  const _diff_clamp_scrollY = Animated.diffClamp(scrollY.current, 0, max);
+
+  const height = interpolateNode(_diff_clamp_scrollY, {
+    inputRange: [0, max],
+    outputRange: [max, 0],
+    extrapolate: Extrapolate.CLAMP,
+  });
+  const translateY = interpolateNode(_diff_clamp_scrollY, {
+    inputRange: [0, max],
+    outputRange: [0, -max],
+    extrapolate: Extrapolate.CLAMP,
+  });
+  const opacity = interpolateNode(_diff_clamp_scrollY, {
+    inputRange: [0, max],
+    outputRange: [1, 0],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  const onMomentumScrollBegin = () => {
+    // StatusBar.setStatusBarHidden(true, "slide");
+    setOnEndReachedCalledDuringMomentum(false);
+  };
+
+  useEffect(() => {
     getFirstPage();
   }, []);
-
-  React.useEffect(() => {
-    if ("page" in photosPage) {
-      console.log(photosPage?.page);
-    }
-  }, [page]);
-
-  const hideHeader = () => {
-    navigation.setOptions({ headerShown: false });
-  };
-
-  const showHeader = () => {
-    navigation.setOptions({ headerShown: true });
-  };
 
   const onEndReached = async () => {
     if (!onEndReachedCalledDuringMomentum) {
@@ -63,6 +85,7 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
       setOnEndReachedCalledDuringMomentum(true);
     }
   };
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getFirstPage();
@@ -115,27 +138,46 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
     },
     [] //refreshing
   );
+
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Animated.View
+        style={[
+          styles.header,
+          {
+            height,
+            transform: [{ translateY }],
+            opacity,
+          },
+        ]}>
+        <Header
+          route={{ name: DrawerScreenNames.MAIN }}
+          navigation={navigation}
+        />
+      </Animated.View>
       {"photos" in photosPage && photosPage.photos.length ? (
-        <Animated.FlatList
+        <AnimatedFlatList
           numColumns={2}
           data={photosPage.photos}
           renderItem={renderItem}
           keyExtractor={(photo) => photo.id.toString()}
           ListFooterComponentStyle={{ height: 120, borderTopWidth: 1 }}
-          onScrollBeginDrag={hideHeader}
-          onScrollEndDrag={showHeader}
           ListFooterComponent={<ListFooter loadingMore={loadingMore} />}
           ItemSeparatorComponent={() => <Divider />}
           onEndReached={onEndReached.bind(this)}
           onEndReachedThreshold={0.5}
-          onMomentumScrollBegin={() => {
-            setOnEndReachedCalledDuringMomentum(false);
-          }}
+          onMomentumScrollBegin={onMomentumScrollBegin}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+          scrollEventThrottle={5}
+          onScroll={Animated.event([
+            {
+              nativeEvent: { contentOffset: { y: scrollY.current } },
+            },
+          ])}
         />
       ) : (
         <View
@@ -143,10 +185,16 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({ queryName }) => {
           <ActivityIndicator color={colors.third} />
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default ViewPhotosPage;
 
-//scroll header hiding done with: https://medium.com/swlh/making-a-collapsible-sticky-header-animations-with-react-native-6ad7763875c3
+const styles = StyleSheet.create({
+  header: {
+    height: CONTAINER_HEIGHT,
+    paddingHorizontal: 0,
+  },
+});
+//https://youtu.be/y8Jy2vxXVFw
