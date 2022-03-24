@@ -1,19 +1,27 @@
 import usePexels from "@/hooks/usePexels";
 import { DrawerScreenNames } from "@/navigation/App/Drawer/DrawerScreenNames";
-import { StatusBar } from "expo-status-bar";
 
 import { ErrorResponse, Photo, Photos } from "pexels";
 import React, { useEffect, useRef, useState } from "react";
 import { View, RefreshControl, StyleSheet, SafeAreaView } from "react-native";
-import { ActivityIndicator, Divider, useTheme } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Button,
+  Colors,
+  Divider,
+  Paragraph,
+  useTheme,
+} from "react-native-paper";
 import Animated, {
   Extrapolate,
   interpolateNode,
 } from "react-native-reanimated";
 import Header from "../Header";
 import AnimatedFlatList from "./AnimatedFlatList";
+import ErrorMessage from "./ErrorMessage";
 import ListFooter from "./ListFooter";
 import PhotoItem from "./PhotoItem";
+const { Value } = Animated;
 
 interface ViewPhotosPageProps {
   queryName: string;
@@ -23,11 +31,7 @@ interface ViewPhotosPageProps {
 type EmptyPhotos = {
   photos: [];
 };
-const { Value } = Animated;
 
-//TODO: naprawic bug przy scrollowaniu ekran sie scina
-
-const CONTAINER_HEIGHT = 50;
 const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   queryName,
   navigation,
@@ -48,6 +52,7 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
 
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState(false);
 
   //header
   const max = 80;
@@ -71,7 +76,6 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   });
 
   const onMomentumScrollBegin = () => {
-    // StatusBar.setStatusBarHidden(true, "slide");
     setOnEndReachedCalledDuringMomentum(false);
   };
 
@@ -94,7 +98,7 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
 
   const getNextPage = async () => {
     setLoadingMore(true);
-    const photosPg = await fetchCategoryPhotos(page, queryName);
+    const photosPg = await fetchCategoryPhotos(page, queryName, setError);
 
     setPhotosPage({
       ...photosPg,
@@ -110,9 +114,10 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   };
 
   const getFirstPage = async () => {
+    setError(false);
     setLoadingMore(true);
 
-    const photosPg = await fetchCategoryPhotos(1, queryName);
+    const photosPg = await fetchCategoryPhotos(1, queryName, setError);
     if (photosPg) {
       setPhotosPage(photosPg);
     }
@@ -136,7 +141,7 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
         </View>
       );
     },
-    [] //refreshing
+    []
   );
 
   return (
@@ -180,10 +185,15 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
           ])}
         />
       ) : (
-        <View
-          style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-          <ActivityIndicator color={colors.third} />
-        </View>
+        <>
+          {error ? (
+            <ErrorMessage func={() => getFirstPage} />
+          ) : (
+            <View style={styles.activityIndicator}>
+              <ActivityIndicator color={colors.third} />
+            </View>
+          )}
+        </>
       )}
     </SafeAreaView>
   );
@@ -192,8 +202,13 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
 export default ViewPhotosPage;
 
 const styles = StyleSheet.create({
+  activityIndicator: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
   header: {
-    height: CONTAINER_HEIGHT,
+    height: 50,
     paddingHorizontal: 0,
   },
 });

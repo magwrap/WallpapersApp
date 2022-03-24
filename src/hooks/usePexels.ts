@@ -4,7 +4,7 @@ const client = createClient(
   '563492ad6f9170000100000144fca9adc7604d6da074fd346b1f5514'
 );
 const usePexels = () => {
-  const fetchCategoryPhotos = async (page: number = 1, queryName: string = "All",) => {
+  const fetchCategoryPhotos = async (page: number = 1, queryName: string = "All", setError: React.Dispatch<React.SetStateAction<boolean>>) => {
       try {
         const query = queryName;
         const photos = await client.photos.curated({ query, per_page: 14, page });
@@ -12,6 +12,7 @@ const usePexels = () => {
         return photos;
       } catch (err) {
         console.error(err);
+        setError(true);
       }
       return null;
     };

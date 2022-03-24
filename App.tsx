@@ -5,7 +5,7 @@ import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import Routes from "@/navigation/Routes";
 import "react-native-gesture-handler";
 import { Provider } from "react-redux";
-import { store } from "@/state";
+import { store } from "@/store";
 
 declare global {
   namespace ReactNativePaper {

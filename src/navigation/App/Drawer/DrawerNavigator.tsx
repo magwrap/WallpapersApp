@@ -34,7 +34,7 @@ const DrawerNavigator: React.FC<DrawerNavigatorProps> = ({}) => {
         name={DrawerScreenNames.MAIN}
         component={MainScreen}
         options={{
-          header: (props) => null,
+          headerShown: false,
         }}
       />
       <Drawer.Screen
@@ -49,7 +49,7 @@ const DrawerNavigator: React.FC<DrawerNavigatorProps> = ({}) => {
         name={DrawerScreenNames.FAVOURITES}
         component={FavouritesScreen}
         options={{
-          header: (props) => <Header {...props} />,
+          headerShown: false,
         }}
       />
     </Drawer.Navigator>

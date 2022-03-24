@@ -1,8 +1,8 @@
 import ImageLoader from "@/components/Photos/ImageLoader";
 import { useNavigation } from "@react-navigation/native";
 import { Photo } from "pexels";
-import * as React from "react";
-import { View, Text, Alert } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, Alert, StyleSheet } from "react-native";
 import {
   ActivityIndicator,
   Colors,
@@ -10,8 +10,13 @@ import {
   useTheme,
 } from "react-native-paper";
 import * as FileSystem from "expo-file-system";
-import useFavouriteStore from "@/hooks/useFavouriteStore";
 import usePexels from "@/hooks/usePexels";
+import {
+  useAppDispatch,
+  useAppSelector,
+  addPhoto,
+  removePhoto,
+} from "@/hooks/reduxHooks";
 
 // import Animated from "react-native-reanimated";
 
@@ -30,10 +35,13 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
   const { colors } = useTheme();
   const { fetchPhoto } = usePexels();
   const navigation = useNavigation();
-  const { addPhoto, favPhotos, removePhoto } = useFavouriteStore();
-  React.useEffect(() => {
+  const favPhotos = useAppSelector((state) => state.favPhotoReducer.photos);
+  const dispatch = useAppDispatch();
+  console.log(favPhotos);
+
+  useEffect(() => {
     loadPhoto();
-    favPhotos.map((photo: Photo) => {
+    favPhotos.map((photo) => {
       if (photo.id === route.params.id) {
         toggleInFavourites();
         return;
@@ -43,8 +51,9 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
 
   const loadPhoto = async () => {
     const photo = await fetchPhoto(route.params.id);
-
-    setPhoto(photo);
+    if (photo && "id" in photo) {
+      setPhoto(photo);
+    }
   };
 
   const _goBack = () => {
@@ -52,7 +61,15 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
   };
   const _toggleFavourites = () => {
     if (photo) {
-      isInFavourites ? removePhoto(photo.id) : addPhoto(photo); //TODO: zmienic przechowywane photos na tylko ich id
+      isInFavourites
+        ? dispatch(removePhoto({ id: photo.id }))
+        : dispatch(
+            addPhoto({
+              id: photo.id,
+              url: photo.src.original,
+              author: photo.photographer,
+            })
+          );
       toggleInFavourites();
     }
   };
@@ -83,21 +100,16 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
   };
   const iconSize = 32;
   return (
-    <View
-      style={{
-        backgroundColor: colors.primary,
-        flex: 1,
-        justifyContent: "center",
-      }}>
-      <View style={{ justifyContent: "flex-end" }}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.headerWithin}>
           <IconButton
             icon="arrow-left"
             color={colors.third}
             size={iconSize}
             onPress={_goBack}
           />
-          <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+          <View style={styles.headerRight}>
             <IconButton
               icon="download"
               color={Colors.black}
@@ -113,7 +125,7 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
           </View>
         </View>
       </View>
-      <View style={{ height: "50%", justifyContent: "center" }}>
+      <View style={styles.photoContainer}>
         {photo?.src.original ? (
           <ImageLoader
             source={{ uri: photo?.src.original }}
@@ -128,20 +140,8 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
           <ActivityIndicator size="large" color={colors.third} />
         )}
       </View>
-      <View
-        style={{
-          flexDirection: "column",
-          justifyContent: "space-around",
-          padding: 5,
-        }}>
-        <Text
-          style={{
-            fontSize: 25,
-            textAlign: "center",
-            color: colors.third,
-            fontWeight: "bold",
-            fontStyle: "italic",
-          }}>
+      <View style={styles.authorContainer}>
+        <Text style={[styles.authorText, { color: colors.third }]}>
           {photo?.photographer}
         </Text>
       </View>
@@ -150,3 +150,27 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
 };
 
 export default ViewPhotoScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  header: {
+    justifyContent: "flex-end",
+  },
+  headerWithin: { flexDirection: "row", justifyContent: "space-between" },
+  headerRight: { flexDirection: "row", justifyContent: "flex-end" },
+  photoContainer: { height: "50%", justifyContent: "center" },
+  authorContainer: {
+    flexDirection: "column",
+    justifyContent: "space-around",
+    padding: 5,
+  },
+  authorText: {
+    fontSize: 25,
+    textAlign: "center",
+    fontWeight: "bold",
+    fontStyle: "italic",
+  },
+});
