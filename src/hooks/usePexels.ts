@@ -17,6 +17,20 @@ const usePexels = () => {
       return null;
     };
 
+  
+  const fetchSearchPhotos = async (page: number = 1, queryName: string = "All", setError: React.Dispatch<React.SetStateAction<boolean>>) => {
+      try {
+        const query = queryName;
+        const photos = await client.photos.search({ query, per_page: 14, page });
+    
+        return photos;
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      }
+      return null;
+    };
+
 const fetchPhoto = async(id: number) => {
     try{
         const photo = client.photos.show({ id });
@@ -28,6 +42,7 @@ const fetchPhoto = async(id: number) => {
 
   return {
       fetchCategoryPhotos,
+      fetchSearchPhotos,
       fetchPhoto,
   };
 }

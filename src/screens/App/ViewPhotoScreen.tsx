@@ -37,7 +37,6 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
   const navigation = useNavigation();
   const favPhotos = useAppSelector((state) => state.favPhotoReducer.photos);
   const dispatch = useAppDispatch();
-  console.log(favPhotos);
 
   useEffect(() => {
     loadPhoto();

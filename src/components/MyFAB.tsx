@@ -1,0 +1,60 @@
+import { EvilIcons } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { Provider, Portal, FAB, useTheme, Colors } from "react-native-paper";
+import { MaterialIcons } from "@expo/vector-icons";
+
+interface MyFABProps {
+  showModal: () => void;
+  category: string;
+}
+
+const MyFAB: React.FC<MyFABProps> = ({ showModal, category }) => {
+  const [state, setState] = React.useState({ open: false });
+  const { colors } = useTheme();
+
+  const onStateChange = ({ open }: { open: boolean }) => setState({ open });
+
+  const { open } = state;
+  return (
+    <Portal>
+      <FAB.Group
+        open={open}
+        icon={open ? "minus" : "plus"}
+        color={"black"}
+        fabStyle={{ backgroundColor: colors.fifth }}
+        actions={[
+          {
+            icon: () => <EvilIcons name="search" size={24} color="black" />,
+            label: "Search",
+            onPress: showModal,
+            labelStyle: { backgroundColor: colors.third },
+            style: { backgroundColor: colors.third },
+            labelTextColor: Colors.white,
+          },
+          {
+            icon: () => (
+              <MaterialIcons name="category" size={24} color="black" />
+            ),
+            label: category ? category : "",
+            onPress: () => {},
+
+            small: false,
+            style: { backgroundColor: colors.fifth },
+            labelStyle: { backgroundColor: colors.fifth },
+            labelTextColor: Colors.white,
+          },
+        ]}
+        onStateChange={onStateChange}
+        onPress={() => {
+          if (open) {
+            // do something if the speed dial is open
+          }
+        }}
+      />
+    </Portal>
+  );
+};
+const styles = StyleSheet.create({});
+
+export default MyFAB;

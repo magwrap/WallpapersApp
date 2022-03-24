@@ -15,12 +15,11 @@ const FavouritesScreen: React.FC<FavouritesScreenProps> = ({
   route,
 }) => {
   const favPhotos = useAppSelector((state) => state.favPhotoReducer.photos);
-  console.log("FavouresScreen");
   return (
     <View style={{ flex: 1 }}>
       <ViewPhotosPage
         navigation={navigation}
-        queryName="a"
+        queryName=""
         favPhotos={favPhotos}
         screenName={route.name}
       />

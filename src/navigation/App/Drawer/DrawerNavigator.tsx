@@ -27,30 +27,18 @@ const DrawerNavigator: React.FC<DrawerNavigatorProps> = ({}) => {
         drawerLabelStyle: {
           color: colors.third,
         },
-        // headerShown: false,
+        headerShown: false,
       }}
       drawerContent={(props) => <CustomDrawerContent props={props} />}>
-      <Drawer.Screen
-        name={DrawerScreenNames.MAIN}
-        component={MainScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Drawer.Screen name={DrawerScreenNames.MAIN} component={MainScreen} />
       <Drawer.Screen
         name={DrawerScreenNames.CATEGORY}
         component={CategoryScreen}
-        options={{
-          header: (props) => <Header {...props} />,
-        }}
       />
 
       <Drawer.Screen
         name={DrawerScreenNames.FAVOURITES}
         component={FavouritesScreen}
-        options={{
-          headerShown: false,
-        }}
       />
     </Drawer.Navigator>
   );

@@ -1,14 +1,9 @@
 import usePexels from "@/hooks/usePexels";
+import { DrawerScreenNames } from "@/navigation/App/Drawer/DrawerScreenNames";
 import { FavPh } from "@/store/slices/favouritePhotos";
 import { ErrorResponse, Photo, Photos } from "pexels";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  RefreshControl,
-  StyleSheet,
-  SafeAreaView,
-  Text,
-} from "react-native";
+import { View, RefreshControl, StyleSheet, SafeAreaView } from "react-native";
 import { ActivityIndicator, Divider, useTheme } from "react-native-paper";
 import Animated, {
   Extrapolate,
@@ -39,9 +34,8 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   screenName,
   favPhotos = null,
 }) => {
-  const { fetchCategoryPhotos } = usePexels();
+  const { fetchCategoryPhotos, fetchSearchPhotos } = usePexels();
   const { colors } = useTheme();
-
   const [page, setPage] = useState(1);
   const [photosPage, setPhotosPage] = useState<
     Photos | EmptyPhotos | ErrorResponse | { photos: FavPh[] }
@@ -85,7 +79,9 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
 
   useEffect(() => {
     !favPhotos && getFirstPage();
-  }, []);
+    console.log(queryName);
+    console.log(screenName);
+  }, [queryName]);
 
   useEffect(() => {
     if (favPhotos) {
@@ -93,7 +89,6 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
         photos: favPhotos,
       });
     }
-    console.log(photosPage);
   }, [favPhotos]);
 
   const onEndReached = async () => {
@@ -111,7 +106,10 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
 
   const getNextPage = async () => {
     setLoadingMore(true);
-    const photosPg = await fetchCategoryPhotos(page, queryName, setError);
+    const photosPg =
+      screenName === DrawerScreenNames.CATEGORY
+        ? await fetchSearchPhotos(page, queryName, setError)
+        : await fetchCategoryPhotos(page, queryName, setError);
 
     setPhotosPage({
       ...photosPg,
@@ -130,7 +128,10 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
     setError(false);
     setLoadingMore(true);
 
-    const photosPg = await fetchCategoryPhotos(1, queryName, setError);
+    const photosPg =
+      screenName === DrawerScreenNames.CATEGORY
+        ? await fetchSearchPhotos(1, queryName, setError)
+        : await fetchCategoryPhotos(1, queryName, setError);
     if (photosPg) {
       setPhotosPage(photosPg);
     }
@@ -170,6 +171,7 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
         ]}>
         <Header route={{ name: screenName }} navigation={navigation} />
       </Animated.View>
+
       {"photos" in photosPage && photosPage.photos.length ? (
         <AnimatedFlatList
           numColumns={2}

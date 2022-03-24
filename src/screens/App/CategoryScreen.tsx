@@ -2,8 +2,8 @@ import CategoryModal from "@/components/CategoryModal";
 import ViewPhotosPage from "@/components/Photos/ViewPhotosPage";
 import * as React from "react";
 import { View, StyleSheet } from "react-native";
-import { FAB } from "react-native-paper";
-import { EvilIcons } from "@expo/vector-icons";
+import MyFAB from "@/components/MyFAB";
+import { Provider } from "react-native-paper";
 
 interface CategoryScreenProps {
   navigation: any;
@@ -17,41 +17,28 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({
   route,
 }) => {
   const [visible, setVisible] = React.useState(false);
-  const [category, setCategory] = React.useState("");
+  const [category, setCategory] = React.useState("animals");
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  React.useEffect(() => {
-    showModal();
-  }, []);
+
+  // React.useEffect(() => {
+  //   setTimeout(showModal, 1000);
+  // }, []);
+
+  React.useEffect(() => {}, [category]);
   return (
     <View style={{ flex: 1 }}>
-      <FAB
-        style={styles.fab}
-        small
-        icon={() => <EvilIcons name="search" size={24} color="black" />}
-        onPress={showModal}
+      <ViewPhotosPage
+        queryName={category}
+        navigation={navigation}
+        screenName={route.name}
       />
-      {category.length ? (
-        <ViewPhotosPage
-          queryName={category}
-          navigation={navigation}
-          screenName={route.name}
-        />
-      ) : null}
 
-      <CategoryModal visible={visible} hideModal={hideModal} />
+      <MyFAB showModal={showModal} category={category} />
+      <CategoryModal props={{ hideModal, visible, category, setCategory }} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-});
 
 export default CategoryScreen;

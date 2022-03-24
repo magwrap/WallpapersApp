@@ -1,5 +1,5 @@
 export enum DrawerScreenNames {
-  MAIN = "All Wallpapers",
+  MAIN = "Fresh",
   CATEGORY = "Search",
   FAVOURITES = "Favourites",
 }
