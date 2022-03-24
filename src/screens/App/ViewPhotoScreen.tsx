@@ -66,8 +66,10 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
         : dispatch(
             addPhoto({
               id: photo.id,
-              url: photo.src.original,
-              author: photo.photographer,
+              src: {
+                original: photo.src.original,
+              },
+              photographer: photo.photographer,
             })
           );
       toggleInFavourites();

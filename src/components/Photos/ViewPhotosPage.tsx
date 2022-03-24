@@ -1,17 +1,15 @@
 import usePexels from "@/hooks/usePexels";
-import { DrawerScreenNames } from "@/navigation/App/Drawer/DrawerScreenNames";
-
+import { FavPh } from "@/store/slices/favouritePhotos";
 import { ErrorResponse, Photo, Photos } from "pexels";
 import React, { useEffect, useRef, useState } from "react";
-import { View, RefreshControl, StyleSheet, SafeAreaView } from "react-native";
 import {
-  ActivityIndicator,
-  Button,
-  Colors,
-  Divider,
-  Paragraph,
-  useTheme,
-} from "react-native-paper";
+  View,
+  RefreshControl,
+  StyleSheet,
+  SafeAreaView,
+  Text,
+} from "react-native";
+import { ActivityIndicator, Divider, useTheme } from "react-native-paper";
 import Animated, {
   Extrapolate,
   interpolateNode,
@@ -20,31 +18,37 @@ import Header from "../Header";
 import AnimatedFlatList from "./AnimatedFlatList";
 import ErrorMessage from "./ErrorMessage";
 import ListFooter from "./ListFooter";
+import NoFavPhotosText from "./NoFavPhotosText";
 import PhotoItem from "./PhotoItem";
 const { Value } = Animated;
 
 interface ViewPhotosPageProps {
   queryName: string;
   navigation: any;
+  screenName: string;
+  favPhotos?: FavPh[] | null;
 }
 
 type EmptyPhotos = {
   photos: [];
 };
-
+//TODO: zrobic jakas defragmentacje i optymalizacje kodu tutaj
 const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   queryName,
   navigation,
+  screenName,
+  favPhotos = null,
 }) => {
   const { fetchCategoryPhotos } = usePexels();
   const { colors } = useTheme();
 
   const [page, setPage] = useState(1);
   const [photosPage, setPhotosPage] = useState<
-    Photos | EmptyPhotos | ErrorResponse
+    Photos | EmptyPhotos | ErrorResponse | { photos: FavPh[] }
   >({
     photos: [],
   });
+
   const [
     onEndReachedCalledDuringMomentum,
     setOnEndReachedCalledDuringMomentum,
@@ -80,19 +84,28 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   };
 
   useEffect(() => {
-    getFirstPage();
+    !favPhotos && getFirstPage();
   }, []);
+
+  useEffect(() => {
+    if (favPhotos) {
+      setPhotosPage({
+        photos: favPhotos,
+      });
+    }
+    console.log(photosPage);
+  }, [favPhotos]);
 
   const onEndReached = async () => {
     if (!onEndReachedCalledDuringMomentum) {
-      getNextPage();
+      !favPhotos && getNextPage();
       setOnEndReachedCalledDuringMomentum(true);
     }
   };
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getFirstPage();
+    !favPhotos && getFirstPage();
     setInterval(() => setRefreshing(false), 1000);
   }, []);
 
@@ -155,17 +168,14 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
             opacity,
           },
         ]}>
-        <Header
-          route={{ name: DrawerScreenNames.MAIN }}
-          navigation={navigation}
-        />
+        <Header route={{ name: screenName }} navigation={navigation} />
       </Animated.View>
       {"photos" in photosPage && photosPage.photos.length ? (
         <AnimatedFlatList
           numColumns={2}
           data={photosPage.photos}
           renderItem={renderItem}
-          keyExtractor={(photo) => photo.id.toString()}
+          keyExtractor={(photo: Photo) => photo.id.toString()}
           ListFooterComponentStyle={{ height: 120, borderTopWidth: 1 }}
           ListFooterComponent={<ListFooter loadingMore={loadingMore} />}
           ItemSeparatorComponent={() => <Divider />}
@@ -186,12 +196,18 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
         />
       ) : (
         <>
-          {error ? (
-            <ErrorMessage func={() => getFirstPage} />
+          {favPhotos ? (
+            <NoFavPhotosText />
           ) : (
-            <View style={styles.activityIndicator}>
-              <ActivityIndicator color={colors.third} />
-            </View>
+            <>
+              {error ? (
+                <ErrorMessage func={() => getFirstPage} />
+              ) : (
+                <View style={styles.activityIndicator}>
+                  <ActivityIndicator color={colors.third} />
+                </View>
+              )}
+            </>
           )}
         </>
       )}

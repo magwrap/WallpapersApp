@@ -4,10 +4,11 @@ import {
   DrawerContentScrollView,
 } from "@react-navigation/drawer";
 
-import { Drawer, useTheme } from "react-native-paper";
+import { Colors, Drawer, useTheme } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
 import PexelsInfo from "@/components/PexelsInfo";
 import { DrawerScreenNames } from "./DrawerScreenNames";
+import { EvilIcons } from "@expo/vector-icons";
 
 interface CustomDrawerContentProps {
   props: DrawerContentComponentProps;
@@ -18,7 +19,7 @@ const chooseItemIcon = (name: string) => {
     case DrawerScreenNames.MAIN:
       return "home";
     case DrawerScreenNames.CATEGORY:
-      return "loupe";
+      return () => <EvilIcons name="search" size={24} color="#5F5AA2" />;
     case DrawerScreenNames.FAVOURITES:
       return "heart";
   }
@@ -33,17 +34,14 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = ({ props }) => {
           <PexelsInfo />
         </View>
         <Drawer.Section>
-          {props.state.routes.map(
-            (route, i) =>
-              route.name !== "Other User Profile" && (
-                <Drawer.Item
-                  key={i}
-                  icon={chooseItemIcon(route.name)}
-                  label={route.name}
-                  onPress={() => props.navigation.navigate(route.name)}
-                />
-              )
-          )}
+          {props.state.routes.map((route, i) => (
+            <Drawer.Item
+              key={i}
+              icon={chooseItemIcon(route.name)}
+              label={route.name}
+              onPress={() => props.navigation.navigate(route.name)}
+            />
+          ))}
         </Drawer.Section>
       </DrawerContentScrollView>
     </View>

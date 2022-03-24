@@ -4,8 +4,10 @@ import { Photo } from "pexels";
 
 export type FavPh = {
   id: Photo["id"],
-  url: Photo["src"]["original"],
-  author: Photo["photographer"],
+  src: {
+    original: Photo["src"]["original"]
+  } 
+  photographer: Photo["photographer"],
 }
 
 type favouritePhotosStateType = {
