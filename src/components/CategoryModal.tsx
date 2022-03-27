@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import {
   Button,
-  Colors,
   Modal,
   Portal,
-  Provider,
   TextInput,
   Title,
   useTheme,

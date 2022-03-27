@@ -1,6 +1,5 @@
 import usePexels from "@/hooks/usePexels";
 import { DrawerScreenNames } from "@/navigation/App/Drawer/DrawerScreenNames";
-import { FavPh } from "@/store/slices/favouritePhotos";
 import { ErrorResponse, Photo, Photos } from "pexels";
 import React, { useEffect, useRef, useState } from "react";
 import { View, RefreshControl, StyleSheet, SafeAreaView } from "react-native";
@@ -9,6 +8,7 @@ import Animated, {
   Extrapolate,
   interpolateNode,
 } from "react-native-reanimated";
+import { EmptyPhotos, FavPh } from "types";
 import Header from "../Header";
 import AnimatedFlatList from "./AnimatedFlatList";
 import ErrorMessage from "./ErrorMessage";
@@ -24,9 +24,6 @@ interface ViewPhotosPageProps {
   favPhotos?: FavPh[] | null;
 }
 
-type EmptyPhotos = {
-  photos: [];
-};
 //TODO: zrobic jakas defragmentacje i optymalizacje kodu tutaj
 const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   queryName,

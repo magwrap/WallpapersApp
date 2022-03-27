@@ -19,6 +19,7 @@ const DrawerNavigator: React.FC<DrawerNavigatorProps> = ({}) => {
   return (
     <Drawer.Navigator
       screenOptions={{
+        lazy: true,
         drawerStyle: {
           backgroundColor: colors.primary,
           width: 240,

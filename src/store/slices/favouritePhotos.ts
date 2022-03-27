@@ -1,14 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Photo } from "pexels";
+import type { FavPh } from "types";
 
 
-export type FavPh = {
-  id: Photo["id"],
-  src: {
-    original: Photo["src"]["original"]
-  } 
-  photographer: Photo["photographer"],
-}
 
 type favouritePhotosStateType = {
   photos : FavPh[],

@@ -3,12 +3,12 @@ import { View, Text } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
 import Animated from "react-native-reanimated";
 
-type HeaderProps = {
+interface HeaderProps {
   route: {
     name: string;
   };
   navigation: any;
-};
+}
 
 const Header: React.FC<HeaderProps> = ({ route, navigation }) => {
   const _openDrawer = () => navigation.toggleDrawer();

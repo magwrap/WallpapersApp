@@ -9,6 +9,7 @@ import { View, StyleSheet } from "react-native";
 import PexelsInfo from "@/components/PexelsInfo";
 import { DrawerScreenNames } from "./DrawerScreenNames";
 import { EvilIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 interface CustomDrawerContentProps {
   props: DrawerContentComponentProps;
@@ -17,7 +18,9 @@ interface CustomDrawerContentProps {
 const chooseItemIcon = (name: string) => {
   switch (name) {
     case DrawerScreenNames.MAIN:
-      return "home";
+      return () => (
+        <MaterialIcons name="new-releases" size={24} color="#5F5AA2" />
+      );
     case DrawerScreenNames.CATEGORY:
       return () => <EvilIcons name="search" size={24} color="#5F5AA2" />;
     case DrawerScreenNames.FAVOURITES:

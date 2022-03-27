@@ -1,9 +1,8 @@
 import CategoryModal from "@/components/CategoryModal";
 import ViewPhotosPage from "@/components/Photos/ViewPhotosPage";
 import * as React from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import MyFAB from "@/components/MyFAB";
-import { Provider } from "react-native-paper";
 
 interface CategoryScreenProps {
   navigation: any;
@@ -16,8 +15,9 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({
   navigation,
   route,
 }) => {
+  console.log(navigation.isFocused());
   const [visible, setVisible] = React.useState(false);
-  const [category, setCategory] = React.useState("animals");
+  const [category, setCategory] = React.useState("Animals");
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -26,7 +26,6 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({
   //   setTimeout(showModal, 1000);
   // }, []);
 
-  React.useEffect(() => {}, [category]);
   return (
     <View style={{ flex: 1 }}>
       <ViewPhotosPage
