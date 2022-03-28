@@ -45,7 +45,7 @@ const FavouritesScreen: React.FC<FavouritesScreenProps> = ({
         />
       ) : (
         <Center>
-          <ActivityIndicator size="large" color={colors.third} />
+          <ActivityIndicator color={colors.third} />
         </Center>
       )}
     </View>

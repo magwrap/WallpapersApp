@@ -12,29 +12,9 @@ interface MyFABProps {
 
 const MyFAB: React.FC<MyFABProps> = ({ showModal, category }) => {
   const [state, setState] = React.useState({ open: false });
-  const [show, setShow] = React.useState(false);
   const { colors } = useTheme();
-  const navigation = useNavigation();
 
   const onStateChange = ({ open }: { open: boolean }) => setState({ open });
-
-  // React.useEffect(() => {
-  //   const _willFocusListener = navigation.addListener("willFocus", () =>
-  //     setShow(true)
-  //   );
-  //   const _willBlurListener = navigation.addListener("willBlur", () =>
-  //     setShow(false)
-  //   );
-
-  //   if (navigation.isFocused()) {
-  //     setShow(false);
-  //   }
-
-  //   return () => {
-  //     _willFocusListener.remove();
-  //     _willBlurListener.remove();
-  //   };
-  // }, []);
 
   const { open } = state;
   return (
