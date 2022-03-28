@@ -31,6 +31,16 @@
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
-    "description": ""
+    "description": "",
+    "plugins": [ 
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow WallpaperApp to access your photos.",
+          "savePhotosPermission": "Allow WallpaperApp to save photos.",
+          "isAccessMediaLocationEnabled": "true"
+        }
+      ]
+    ]
   }
 }

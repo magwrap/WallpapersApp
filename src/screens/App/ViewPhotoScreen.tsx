@@ -17,8 +17,8 @@ import {
   addPhoto,
   removePhoto,
 } from "@/hooks/reduxHooks";
-
-// import Animated from "react-native-reanimated";
+import * as MediaLibrary from "expo-media-library";
+import { addPhotoToLibary } from "@/hooks/useMediaLibary";
 
 interface ViewPhotoScreenProps {
   route: {
@@ -31,12 +31,19 @@ interface ViewPhotoScreenProps {
 const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
   const [photo, setPhoto] = React.useState<Photo>();
   const [isInFavourites, setIsInFavourites] = React.useState(false);
+  const [downloading, setDownloading] = React.useState(false);
   const toggleInFavourites = () => setIsInFavourites(!isInFavourites);
   const { colors } = useTheme();
   const { fetchPhoto } = usePexels();
   const navigation = useNavigation();
   const favPhotos = useAppSelector((state) => state.favPhotoReducer.photos);
   const dispatch = useAppDispatch();
+  const [status, requestPermission] = MediaLibrary.usePermissions();
+  useEffect(() => {
+    if (!status?.granted) {
+      requestPermission();
+    }
+  }, []);
 
   useEffect(() => {
     loadPhoto();
@@ -74,21 +81,26 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
       toggleInFavourites();
     }
   };
+
   const _downloadPhoto = () => {
     //TODO: dodac push notification informujace o pobraniu zdjecia
+    setDownloading(true);
     if (photo) {
-      let link = photo.src.original.split("/");
+      let link = photo.src.portrait.split("/");
+      // let link = photo.src.original;
       let name = link[link.length - 1];
       FileSystem.downloadAsync(
         photo.src.original,
         FileSystem.documentDirectory + name
       )
         .then(({ uri }) => {
+          addPhotoToLibary(uri);
           Alert.alert(
             "Download succesfull!",
-            "Your wallpaper has been downloaded to " + uri,
+            "Your wallpaper has been saved in photos/wallpapers",
             [{ text: "OK" }]
           );
+          setDownloading(false);
         })
         .catch((error) => {
           Alert.alert(
@@ -96,6 +108,8 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
             "Something went wrong while downloading your wallpaper, try again",
             [{ text: "OK" }]
           );
+
+          setDownloading(false);
         });
     }
   };
@@ -111,12 +125,19 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
             onPress={_goBack}
           />
           <View style={styles.headerRight}>
-            <IconButton
-              icon="download"
-              color={Colors.black}
-              size={iconSize}
-              onPress={_downloadPhoto}
-            />
+            {!downloading ? (
+              <IconButton
+                icon="download"
+                color={Colors.black}
+                size={iconSize}
+                onPress={_downloadPhoto}
+              />
+            ) : (
+              <ActivityIndicator
+                color={colors.third}
+                style={{ paddingRight: iconSize / 2 }}
+              />
+            )}
             <IconButton
               icon="heart"
               color={isInFavourites ? Colors.red400 : Colors.grey600}
@@ -131,8 +152,6 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
           <ImageLoader
             source={{ uri: photo?.src.original }}
             style={{
-              //   minHeight: route.params.photo.height,
-              //   minWidth: route.params.photo.width,
               width: "100%",
               height: "100%",
             }}
@@ -162,7 +181,7 @@ const styles = StyleSheet.create({
   },
   headerWithin: { flexDirection: "row", justifyContent: "space-between" },
   headerRight: { flexDirection: "row", justifyContent: "flex-end" },
-  photoContainer: { height: "50%", justifyContent: "center" },
+  photoContainer: { height: "70%", justifyContent: "center" },
   authorContainer: {
     flexDirection: "column",
     justifyContent: "space-around",

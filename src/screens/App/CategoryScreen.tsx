@@ -15,7 +15,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({
   navigation,
   route,
 }) => {
-  console.log(navigation.isFocused());
+  // console.log(navigation.isFocused());
   const [visible, setVisible] = React.useState(false);
   const [category, setCategory] = React.useState("Animals");
 
