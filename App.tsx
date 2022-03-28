@@ -47,9 +47,7 @@ export default function App() {
       <Provider store={store}>
         <PaperProvider theme={theme}>
           <Routes />
-          <StatusBar
-          // hidden={true}
-          />
+          <StatusBar />
         </PaperProvider>
       </Provider>
     );

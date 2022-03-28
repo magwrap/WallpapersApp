@@ -76,8 +76,6 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
 
   useEffect(() => {
     !favPhotos && getFirstPage();
-    // console.log(queryName);
-    // console.log(screenName);
   }, [queryName]);
 
   useEffect(() => {

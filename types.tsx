@@ -11,3 +11,8 @@ export type FavPh = {
   };
   photographer: Photo["photographer"];
 };
+
+export type favouritePhotosStateType = {
+  photos: FavPh[];
+};
+export type StoredPhotos = favouritePhotosStateType | null | undefined;
