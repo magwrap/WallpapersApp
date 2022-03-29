@@ -31,7 +31,7 @@
     "web": {
       "favicon": "./assets/images/wallpaper.png"
     },
-    "description": "",
+    "description": "An app where you can choose, download, add to favorites wallpapers from pexels API.",
     "plugins": [
       [
         "expo-media-library",
@@ -41,6 +41,7 @@
           "isAccessMediaLocationEnabled": "true"
         }
       ]
-    ]
+    ],
+    "githubUrl": "https://github.com/magwrap/WallpapersApp"
   }
 }
