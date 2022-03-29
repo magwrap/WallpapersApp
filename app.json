@@ -4,12 +4,12 @@
     "slug": "wallpapers-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/wallpaper.png",
+    "icon": "./assets/images/wallpaper_small.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/wallpaper.png",
-      "resizeMode": "contain",
+      "resizeMode": "center",
       "backgroundColor": "#30292f"
     },
     "updates": {
