@@ -6,7 +6,6 @@ import CategoryScreen from "@/screens/App/CategoryScreen";
 import { useTheme } from "react-native-paper";
 import CustomDrawerContent from "./CustomDrawerContent";
 
-import Header from "@/components/Header";
 import FavouritesScreen from "@/screens/App/FavouritesScreen";
 import { DrawerScreenNames } from "./DrawerScreenNames";
 

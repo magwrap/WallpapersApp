@@ -1,6 +1,5 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import useCachedResources from "./src/hooks/useCachedResources";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import Routes from "@/navigation/Routes";
 import "react-native-gesture-handler";
@@ -38,18 +37,17 @@ const theme = {
 };
 
 export default function App() {
-  const isLoadingComplete = useCachedResources();
-
-  if (!isLoadingComplete) {
-    return null;
-  } else {
-    return (
-      <Provider store={store}>
-        <PaperProvider theme={theme}>
-          <Routes />
-          <StatusBar />
-        </PaperProvider>
-      </Provider>
-    );
-  }
+  return (
+    <Provider store={store}>
+      <PaperProvider theme={theme}>
+        <Routes />
+        <StatusBar
+          hidden={false}
+          style="light"
+          backgroundColor="black"
+          animated={true}
+        />
+      </PaperProvider>
+    </Provider>
+  );
 }

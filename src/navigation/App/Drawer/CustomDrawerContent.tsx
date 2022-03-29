@@ -4,7 +4,7 @@ import {
   DrawerContentScrollView,
 } from "@react-navigation/drawer";
 
-import { Colors, Drawer, useTheme } from "react-native-paper";
+import { Drawer, useTheme } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
 import PexelsInfo from "@/components/PexelsInfo";
 import { DrawerScreenNames } from "./DrawerScreenNames";
@@ -31,7 +31,7 @@ const chooseItemIcon = (name: string) => {
 const CustomDrawerContent: React.FC<CustomDrawerContentProps> = ({ props }) => {
   const { colors } = useTheme();
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <DrawerContentScrollView {...props}>
         <View style={[styles.photoProvider, { backgroundColor: colors.third }]}>
           <PexelsInfo />
@@ -52,6 +52,7 @@ const CustomDrawerContent: React.FC<CustomDrawerContentProps> = ({ props }) => {
 };
 
 const styles = StyleSheet.create({
+  container: { flex: 1 },
   photoProvider: {
     alignItems: "center",
     flexDirection: "row",

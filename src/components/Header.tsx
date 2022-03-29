@@ -1,22 +1,21 @@
 import React from "react";
-import { View, Text } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
-import Animated from "react-native-reanimated";
 
 interface HeaderProps {
   route: {
     name: string;
   };
   navigation: any;
+  height: number;
 }
 
-const Header: React.FC<HeaderProps> = ({ route, navigation }) => {
+const Header: React.FC<HeaderProps> = ({ route, navigation, height }) => {
   const _openDrawer = () => navigation.toggleDrawer();
 
   const _goBack = () => navigation.goBack();
   const { colors } = useTheme();
   return (
-    <Appbar.Header>
+    <Appbar.Header style={{ height }}>
       {route.name === "ViewPhoto" ? (
         <Appbar.Action
           icon="arrow-left"

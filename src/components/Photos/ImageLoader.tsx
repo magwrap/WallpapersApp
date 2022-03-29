@@ -1,7 +1,7 @@
 import React from "react";
-import { Animated, Image } from "react-native";
+import { Animated, ImageProps } from "react-native";
 
-export default class ImageLoader extends React.Component<Image> {
+export default class ImageLoader extends React.Component<ImageProps> {
   //src: https://youtu.be/vzPmI0GCDPM
 
   state = {

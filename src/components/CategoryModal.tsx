@@ -32,10 +32,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ props }) => {
       <Modal
         visible={props.visible}
         onDismiss={props.hideModal}
-        contentContainerStyle={[
-          styles.contentContainer,
-          { backgroundColor: "rgba(25, 25, 25, 0.82)" },
-        ]}>
+        contentContainerStyle={styles.contentContainer}>
         <View style={styles.container}>
           <View>
             <Title style={[styles.title, { color: colors.third }]}>
@@ -68,12 +65,12 @@ const styles = StyleSheet.create({
     paddingBottom: 35,
     fontWeight: "bold",
     fontSize: 25,
-    // color: Colors.grey200,
   },
   contentContainer: {
     height: "40%",
     padding: 5,
     margin: 20,
+    backgroundColor: "rgba(25, 25, 25, 0.82)",
   },
   container: {
     justifyContent: "space-between",

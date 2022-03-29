@@ -87,7 +87,6 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
     setDownloading(true);
     if (photo) {
       let link = photo.src.portrait.split("/");
-      // let link = photo.src.original;
       let name = link[link.length - 1];
       FileSystem.downloadAsync(
         photo.src.original,

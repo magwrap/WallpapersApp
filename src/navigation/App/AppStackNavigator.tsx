@@ -22,7 +22,6 @@ const AppStackNavigator: React.FC<AppStackNavigatorProps> = ({}) => {
           headerShown: false,
         }}
       />
-      {/* zewnetrzny poza tabsami */}
     </Stack.Navigator>
   );
 };

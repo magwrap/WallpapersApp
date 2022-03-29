@@ -3,7 +3,6 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Portal, FAB, useTheme, Colors } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
 interface MyFABProps {
   showModal: () => void;
@@ -25,10 +24,6 @@ const MyFAB: React.FC<MyFABProps> = ({ showModal, category }) => {
         color={colors.third}
         fabStyle={{
           backgroundColor: colors.fifth,
-          position: "absolute",
-          margin: 16,
-          right: 0,
-          bottom: 0,
         }}
         actions={[
           {

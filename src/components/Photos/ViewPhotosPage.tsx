@@ -2,7 +2,13 @@ import usePexels from "@/hooks/usePexels";
 import { DrawerScreenNames } from "@/navigation/App/Drawer/DrawerScreenNames";
 import { ErrorResponse, Photo, Photos } from "pexels";
 import React, { useEffect, useRef, useState } from "react";
-import { View, RefreshControl, StyleSheet, SafeAreaView } from "react-native";
+import {
+  View,
+  RefreshControl,
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import { ActivityIndicator, Divider, useTheme } from "react-native-paper";
 import Animated, {
   Extrapolate,
@@ -25,6 +31,8 @@ interface ViewPhotosPageProps {
 }
 
 //TODO: zrobic jakas defragmentacje i optymalizacje kodu tutaj
+//TODO: poprawic ukrywajacy sie header
+const HEADER_HEIGHT = 60;
 const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   queryName,
   navigation,
@@ -39,7 +47,6 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   >({
     photos: [],
   });
-
   const [
     onEndReachedCalledDuringMomentum,
     setOnEndReachedCalledDuringMomentum,
@@ -50,23 +57,26 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   const [error, setError] = useState(false);
 
   //header
-  const max = 80;
   const scrollY = useRef(new Value(0));
-  const _diff_clamp_scrollY = Animated.diffClamp(scrollY.current, 0, max);
-
+  const _diff_clamp_scrollY = Animated.diffClamp(
+    scrollY.current,
+    0,
+    HEADER_HEIGHT
+  );
+  const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
   const height = interpolateNode(_diff_clamp_scrollY, {
-    inputRange: [0, max],
-    outputRange: [max, 0],
+    inputRange: [0, HEADER_HEIGHT + statusBarHeight - statusBarHeight / 2],
+    outputRange: [HEADER_HEIGHT, 0],
     extrapolate: Extrapolate.CLAMP,
   });
   const translateY = interpolateNode(_diff_clamp_scrollY, {
-    inputRange: [0, max],
-    outputRange: [0, -max],
+    inputRange: [0, HEADER_HEIGHT],
+    outputRange: [0, -HEADER_HEIGHT],
     extrapolate: Extrapolate.CLAMP,
   });
   const opacity = interpolateNode(_diff_clamp_scrollY, {
-    inputRange: [0, max],
-    outputRange: [1, 0],
+    inputRange: [0, HEADER_HEIGHT],
+    outputRange: [HEADER_HEIGHT, 0],
     extrapolate: Extrapolate.CLAMP,
   });
 
@@ -157,14 +167,18 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
     <SafeAreaView style={{ flex: 1 }}>
       <Animated.View
         style={[
-          styles.header,
           {
+            zIndex: 1,
             height,
             transform: [{ translateY }],
             opacity,
           },
         ]}>
-        <Header route={{ name: screenName }} navigation={navigation} />
+        <Header
+          route={{ name: screenName }}
+          navigation={navigation}
+          height={HEADER_HEIGHT}
+        />
       </Animated.View>
 
       {"photos" in photosPage && photosPage.photos.length ? (
@@ -173,8 +187,9 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
           data={photosPage.photos}
           renderItem={renderItem}
           keyExtractor={(photo: Photo) => photo.id.toString()}
-          ListFooterComponentStyle={{ height: 120, borderTopWidth: 1 }}
+          ListFooterComponentStyle={styles.listFooter}
           ListFooterComponent={<ListFooter loadingMore={loadingMore} />}
+          contentContainerStyle={styles.flatList}
           ItemSeparatorComponent={() => <Divider />}
           onEndReached={onEndReached.bind(this)}
           onEndReachedThreshold={0.5}
@@ -220,9 +235,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  header: {
-    height: 50,
-    paddingHorizontal: 0,
+  listFooter: { height: 120, borderTopWidth: 1 },
+  flatList: {
+    // paddingTop: HEADER_HEIGHT,
+    zIndex: 10,
   },
 });
 //https://youtu.be/y8Jy2vxXVFw
