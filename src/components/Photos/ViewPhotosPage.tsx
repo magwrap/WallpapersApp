@@ -32,7 +32,7 @@ interface ViewPhotosPageProps {
 
 //TODO: zrobic jakas defragmentacje i optymalizacje kodu tutaj
 //TODO: poprawic ukrywajacy sie header
-const HEADER_HEIGHT = 60;
+const HEADER_HEIGHT = 70;
 const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   queryName,
   navigation,
@@ -65,7 +65,11 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   );
   const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
   const height = interpolateNode(_diff_clamp_scrollY, {
-    inputRange: [0, HEADER_HEIGHT + statusBarHeight - statusBarHeight / 2],
+    inputRange: [
+      0,
+      HEADER_HEIGHT + statusBarHeight,
+      // - statusBarHeight / 2
+    ],
     outputRange: [HEADER_HEIGHT, 0],
     extrapolate: Extrapolate.CLAMP,
   });
@@ -237,7 +241,6 @@ const styles = StyleSheet.create({
   },
   listFooter: { height: 120, borderTopWidth: 1 },
   flatList: {
-    // paddingTop: HEADER_HEIGHT,
     zIndex: 10,
   },
 });
