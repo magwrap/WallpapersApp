@@ -1,8 +1,6 @@
-# expo-template
-Template to copy and work with
-contains:
-- react-native-paper
-- redux
-- typescript
-- firebase
-- react-navigation
+# WallpapersApp
+An app where you can go through photos from Pexels API. 
+You can: 
+  -donwload photo,
+  -add to favourites,
+  -search by categories
