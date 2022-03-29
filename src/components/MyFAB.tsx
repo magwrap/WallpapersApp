@@ -24,6 +24,9 @@ const MyFAB: React.FC<MyFABProps> = ({ showModal, category }) => {
         color={colors.third}
         fabStyle={{
           backgroundColor: colors.fifth,
+          position: "absolute",
+          right: 0,
+          bottom: 0,
         }}
         actions={[
           {
