@@ -51,3 +51,8 @@ export default function App() {
     </Provider>
   );
 }
+
+//TODO: zapisywac ostatnio wyszukiwane kategorie w local storageS
+//TODO: odlagowac header
+//TODO: ciemniejszy header zeby sie lepiej wyróżniał
+//TODO: moze zmienic sposob wyszukiwania - malo intuicyjny sie wydaje
