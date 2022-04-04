@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  FlatList,
 } from "react-native";
 import {
   ActivityIndicator,
@@ -65,7 +66,17 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
     setOnEndReachedCalledDuringMomentum(false);
   };
 
+  const flatListRef: React.MutableRefObject<FlatList<Photo> | null> =
+    useRef(null);
+
+  const scrollToTop = () => {
+    flatListRef.current &&
+      "scrollToIndex" in flatListRef.current &&
+      flatListRef.current.scrollToIndex({ index: 0, animated: true });
+  };
+
   useEffect(() => {
+    scrollToTop();
     !favPhotos && getFirstPage();
   }, [queryName]);
 
@@ -155,7 +166,10 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
       </View>
 
       {"photos" in photosPage && photosPage.photos.length ? (
-        <AnimatedFlatList
+        <FlatList
+          ref={(ref) => {
+            flatListRef.current = ref;
+          }}
           disableScrollViewPanResponder={true}
           removeClippedSubviews={true}
           renderItem={renderItem}
