@@ -1,5 +1,5 @@
 import Center from "@/components/Center";
-import ViewPhotosPage from "@/components/Photos/ViewPhotosPage";
+import ViewPhotosPage from "@/components/Photos/ViewPhotosPageWithStickyHeader";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { getPhotos } from "@/hooks/useAsyncStoragePhotos";
 import { updateState } from "@/store/slices/favouritePhotos";
@@ -45,7 +45,7 @@ const FavouritesScreen: React.FC<FavouritesScreenProps> = ({
         />
       ) : (
         <Center>
-          <ActivityIndicator color={colors.third} />
+          <ActivityIndicator color={colors.third} size="large" />
         </Center>
       )}
     </View>

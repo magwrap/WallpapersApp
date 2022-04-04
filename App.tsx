@@ -27,9 +27,9 @@ const theme = {
   myOwnProperty: true,
   colors: {
     ...DefaultTheme.colors,
-    primary: "#30292f",
+    primary: "#000000",
     accent: "#413F54",
-    third: "#5F5AA2",
+    third: "#4E4991",
     fourth: "#355691",
     fifth: "#3F4045",
     text: "#5F5AA2",

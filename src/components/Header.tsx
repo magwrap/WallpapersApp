@@ -1,5 +1,5 @@
 import React from "react";
-import { Appbar, useTheme } from "react-native-paper";
+import { Appbar, Colors, useTheme } from "react-native-paper";
 
 interface HeaderProps {
   route: {
@@ -14,8 +14,9 @@ const Header: React.FC<HeaderProps> = ({ route, navigation, height }) => {
 
   const _goBack = () => navigation.goBack();
   const { colors } = useTheme();
+  const headerStyles = { borderBottomWidth: 0.5, borderColor: Colors.grey900 };
   return (
-    <Appbar.Header style={{ height }}>
+    <Appbar.Header style={[{ height }, headerStyles]}>
       {route.name === "ViewPhoto" ? (
         <Appbar.Action
           icon="arrow-left"

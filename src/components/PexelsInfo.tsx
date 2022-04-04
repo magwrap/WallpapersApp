@@ -3,16 +3,22 @@ import { View, Image, Text, StyleSheet } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 import Anchor from "./Anchor";
 
-interface PexelsInfoProps {}
+interface PexelsInfoProps {
+  textShown?: boolean;
+}
 
-const PexelsInfo: React.FC<PexelsInfoProps> = ({}) => {
+const PexelsInfo: React.FC<PexelsInfoProps> = ({ textShown = true }) => {
   const { colors } = useTheme();
   return (
     <View style={styles.container}>
       <Anchor style={styles.anchor}>
-        <Button mode="text" compact={true} color={colors.accent}>
-          <Text style={{ fontSize: 10 }}>Photos provided by Pexels</Text>
-        </Button>
+        {textShown ? (
+          <Button mode="text" compact={true} color={colors.primary}>
+            <Text style={{ fontSize: 10 }}>Photos provided by Pexels</Text>
+          </Button>
+        ) : (
+          <View style={styles.padding}></View>
+        )}
         <Image
           source={{ uri: "https://images.pexels.com/lib/api/pexels.png" }}
           resizeMethod="auto"
@@ -30,6 +36,9 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 50,
     margin: 5,
+  },
+  padding: {
+    paddingTop: 10,
   },
 });
 

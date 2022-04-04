@@ -61,32 +61,6 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(false);
 
-  //header
-  const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight : 0;
-
-  const scrollY = useRef(new Value(0));
-  // console.log(scrollY.current);
-  const _diff_clamp_scrollY = Animated.diffClamp(
-    scrollY.current,
-    0,
-    HEADER_HEIGHT
-  );
-  const height = interpolateNode(_diff_clamp_scrollY, {
-    inputRange: [0, HEADER_HEIGHT + statusBarHeight],
-    outputRange: [HEADER_HEIGHT, 0],
-    extrapolate: Extrapolate.CLAMP,
-  });
-  const translateY = interpolateNode(_diff_clamp_scrollY, {
-    inputRange: [0, HEADER_HEIGHT],
-    outputRange: [0, -HEADER_HEIGHT],
-    extrapolate: Extrapolate.CLAMP,
-  });
-  const opacity = interpolateNode(_diff_clamp_scrollY, {
-    inputRange: [0, HEADER_HEIGHT],
-    outputRange: [HEADER_HEIGHT, 0],
-    extrapolate: Extrapolate.CLAMP,
-  });
-
   const onMomentumScrollBegin = () => {
     setOnEndReachedCalledDuringMomentum(false);
   };
@@ -172,37 +146,20 @@ const ViewPhotosPage: React.FC<ViewPhotosPageProps> = ({
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Animated.View
-        style={[
-          {
-            zIndex: 1,
-            height,
-            transform: [{ translateY }],
-            opacity,
-          },
-        ]}>
+      <View>
         <Header
           route={{ name: screenName }}
           navigation={navigation}
           height={HEADER_HEIGHT}
         />
-      </Animated.View>
+      </View>
 
       {"photos" in photosPage && photosPage.photos.length ? (
         <AnimatedFlatList
-          renderItem={renderItem}
-          keyExtractor={(photo: Photo) => photo.id.toString()}
-          onScroll={Animated.event([
-            {
-              nativeEvent: {
-                contentOffset: {
-                  y: scrollY.current,
-                },
-              },
-            },
-          ])}
           disableScrollViewPanResponder={true}
           removeClippedSubviews={true}
+          renderItem={renderItem}
+          keyExtractor={(photo: Photo) => photo.id.toString()}
           numColumns={2}
           data={photosPage.photos}
           ListFooterComponentStyle={styles.listFooter}

@@ -52,7 +52,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ props }) => {
             onPress={_onPress}
             mode="contained"
             style={[styles.button]}
-            labelStyle={{ color: colors.third }}>
+            labelStyle={[styles.buttonLabel, { color: colors.third }]}>
             Search
           </Button>
         </View>
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   contentContainer: {
+    marginBottom: "60%",
     height: "40%",
     padding: 5,
     margin: 20,
@@ -87,6 +88,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "90%",
     height: 60,
+  },
+  buttonLabel: {
+    width: "80%",
   },
 });
 

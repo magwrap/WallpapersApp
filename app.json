@@ -9,8 +9,8 @@
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/wallpaper.png",
-      "resizeMode": "center",
-      "backgroundColor": "#30292f"
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -25,7 +25,7 @@
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/wallpaper.png",
-        "backgroundColor": "#30292f"
+        "backgroundColor": "#000000"
       }
     },
     "web": {

@@ -127,7 +127,7 @@ const ViewPhotoScreen: React.FC<ViewPhotoScreenProps> = ({ route }) => {
             {!downloading ? (
               <IconButton
                 icon="download"
-                color={Colors.black}
+                color={Colors.grey100}
                 size={iconSize}
                 onPress={_downloadPhoto}
               />

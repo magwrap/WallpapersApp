@@ -23,7 +23,9 @@ const MyFAB: React.FC<MyFABProps> = ({ showModal, category }) => {
         icon={open ? "minus" : "plus"}
         color={colors.third}
         fabStyle={{
-          backgroundColor: colors.fifth,
+          backgroundColor: colors.primary,
+          borderColor: Colors.grey800,
+          borderWidth: 0.5,
           position: "absolute",
           right: 0,
           bottom: 0,
@@ -45,8 +47,12 @@ const MyFAB: React.FC<MyFABProps> = ({ showModal, category }) => {
             onPress: () => {},
 
             small: false,
-            style: { backgroundColor: colors.fifth },
-            labelStyle: { backgroundColor: colors.fifth },
+            style: {
+              backgroundColor: colors.primary,
+              borderWidth: 0.5,
+              borderColor: Colors.grey800,
+            },
+            labelStyle: { backgroundColor: colors.primary },
             labelTextColor: Colors.white,
           },
         ]}

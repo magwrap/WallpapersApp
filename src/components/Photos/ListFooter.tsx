@@ -16,7 +16,7 @@ const ListFooter: React.FC<ListFooterProps> = ({ loadingMore }) => {
           <ActivityIndicator color={colors.third} size="large" />
         </View>
       )}
-      <PexelsInfo />
+      <PexelsInfo textShown={false} />
     </>
   );
 };

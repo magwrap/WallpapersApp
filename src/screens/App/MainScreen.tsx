@@ -5,7 +5,7 @@ interface MainScreenProps {
   route: any;
 }
 
-import ViewPhotosPage from "@/components/Photos/ViewPhotosPage";
+import ViewPhotosPage from "@/components/Photos/ViewPhotosPageWithStickyHeader";
 
 const MainScreen: React.FC<MainScreenProps> = ({ navigation, route }) => {
   return (
